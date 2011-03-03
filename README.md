@@ -45,7 +45,7 @@ Or you can specify timeout for each key individually:
 returns true on successful input or false if key already exists
 
 
- #### get(key)
+#### get(key)
 
 * key - name under object is stored
 
