@@ -81,7 +81,6 @@ describe('ExpiringMap', function () {
             if(map.containsKey(KEY)){
                 map.remove(KEY);
             }
-
             var objectToStore = {};
             objectToStore[OBJECT_KEY] = VALUE;
             var result = map.put(KEY, objectToStore, 2);
