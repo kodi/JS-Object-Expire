@@ -24,8 +24,7 @@ and if within next 60 seconds we try to get this key:
 if we wait longer than 60 seconds (default expire time)
 
     map.get("foo");
-
-   //returns false
+    //returns false
 
 You can also specify default object timeout on init:
     var map = new ExpiringMap(30); //in seconds
