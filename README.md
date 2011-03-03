@@ -37,9 +37,10 @@ Or you can specify timeout for each key individually:
 ### Methods
 
 #### Put(key, object, timeout)
-*key - name under this object will be stored
-*object - object to store
-*timeout - [optional] expiration timeout (in seconds), if not provided default timeout will be used
+
+* key - name under this object will be stored
+* object - object to store
+* timeout - [optional] expiration timeout (in seconds), if not provided default timeout will be used
 
 returns true on successful input or false if key already exists
 
