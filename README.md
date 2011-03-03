@@ -33,4 +33,4 @@ You can also specify default object timeout on init:
 Or you can specify timeout for each key individually:
     map.put("foo",{someNumber:321}, 600); //expire key foo after 600 seconds
 
-### [ExpiringMap Documentation](https://github.com/kodi/JS-Object-Expire/wiki/Expire-Map)
+### [ExpiringMap Documentation](https://github.com/kodi/JS-Object-Expire/wiki/ExpiringMap)
