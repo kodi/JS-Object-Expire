@@ -133,10 +133,13 @@ ExpiringMap.prototype.getInfo = function(key) {
         var obj = this._objectContainer[key];
 
         return {expired:false,
-            info:{createdTimestamp: obj.createdTimestamp,
-                modifiedTimestamp: obj.modifiedTimestamp,
-                timeout: obj.timeout,
-                endTime: obj.endTime}}
+            info:{
+                    createdTimestamp: obj.createdTimestamp,
+                    modifiedTimestamp: obj.modifiedTimestamp,
+                    timeout: obj.timeout,
+                    endTime: obj.endTime
+            }
+        }
     } else {
         return {expired:true,info:null};
     }

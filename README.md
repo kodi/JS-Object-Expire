@@ -39,7 +39,7 @@ Or you can specify timeout for each key individually:
     map.put("foo",{someNumber:321}, 600); //expire key foo after 600 seconds
 
 
-##### Callbacks
+##### On Expire Callbacks
 
 Also you can define callback for each key
 
