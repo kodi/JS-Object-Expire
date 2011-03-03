@@ -16,7 +16,12 @@ ExpiringMap.prototype.init = function (initObject) {
     }
 };
 
-
+/**
+ * 
+ * @param name
+ * @param objectToStore
+ * @param timeout
+ */
 ExpiringMap.prototype.put = function(name, objectToStore, timeout) {
 
     if (this.isKeyActive(name) === false) {
@@ -45,6 +50,10 @@ ExpiringMap.prototype.put = function(name, objectToStore, timeout) {
     }
 };
 
+/**
+ * 
+ * @param name
+ */
 
 ExpiringMap.prototype.get = function(name) {
 
@@ -55,6 +64,11 @@ ExpiringMap.prototype.get = function(name) {
     }
 };
 
+/**
+ * 
+ * @param name
+ * @param modify
+ */
 ExpiringMap.prototype.isKeyActive = function(name, modify) {
 
     if (typeof(this._objectContainer[name]) != 'undefined') {
@@ -77,18 +91,24 @@ ExpiringMap.prototype.isKeyActive = function(name, modify) {
     }
 };
 
+/**
+ * 
+ * @param key
+ */
 ExpiringMap.prototype.getAccessed = function(key) {
     if (this.isKeyActive(key)) {
         return this._objectContainer[key].modifiedTimestamp;
     }
 };
 
+/**
+ * 
+ */
 ExpiringMap.prototype.getKeyList = function() {
 
     var list = [];
 
     for (var key in this._objectContainer) {
-        console.log(key);
         if (this.isKeyActive(key)) {
             list.push(key);
         }
@@ -96,6 +116,11 @@ ExpiringMap.prototype.getKeyList = function() {
     return list;
 };
 
+
+/**
+ * 
+ * @param key
+ */
 ExpiringMap.prototype.getInfo = function(key) {
     if (this.isKeyActive(key)) {
 
@@ -111,10 +136,18 @@ ExpiringMap.prototype.getInfo = function(key) {
     }
 };
 
+/**
+ * 
+ * @param key
+ */
 ExpiringMap.prototype.containsKey = function(key) {
     return this.isKeyActive(key);
 };
 
+/**
+ * 
+ * @param key
+ */
 ExpiringMap.prototype.remove = function(key) {
     if (this.isKeyActive(key)) {
         delete this._objectContainer[key];
@@ -122,4 +155,4 @@ ExpiringMap.prototype.remove = function(key) {
     } else {
         return false;
     }
-}
+};
