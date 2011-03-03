@@ -1,6 +1,11 @@
 Javascript Object Expire
 ========================
 
+Time aware data structures.
+
+For now Expiring Map is supported.
+
+
 ExpiringMap
 -----------
 
