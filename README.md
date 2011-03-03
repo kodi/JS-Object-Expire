@@ -39,6 +39,8 @@ Or you can specify timeout for each key individually:
     map.put("foo",{someNumber:321}, 600); //expire key foo after 600 seconds
 
 
+##### Callbacks
+
 Also you can define callback for each key
 
     map.put("foo",{someNumber:321}, 30, function(key, data){
@@ -46,10 +48,15 @@ Also you can define callback for each key
         console.log(data);    
     });
 
-Callback will be executed when we call get method for this key again
+Callback will be executed when we call get method for this key again after expiration time
     map.get("foo");
-    
+
+    //this will trigger callback on key foo
+
 Or when we call getKeyList after expiration time
     map.getKeyList();
+
+    //this will trigger callbacks on all expired keys
+
 
 ### [ExpiringMap Documentation](https://github.com/kodi/JS-Object-Expire/wiki/ExpiringMap)
