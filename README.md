@@ -57,15 +57,11 @@ returns stored object or false if key doesn't exists
 
 returns true if successfully removed or false if object has already expired or it didn't existed in the map
 
-#### getAccessed(key)
-
-* key - name under object is stored
-
-returns last accessed timestamp for this key
 
 #### getKeyList()
 
 returns array of currently active keys, or empty array if there is no active keys left
+
 
 #### getInfo(key)
 
@@ -97,3 +93,10 @@ where:
 * endTime - timestamp after which object under this key will expire
 * modifiedTimestamp - last accessed timestamp
 * timeout - key timeout in seconds
+
+
+#### getAccessed(key)
+
+* key - name under object is stored
+
+returns last accessed timestamp for this key
