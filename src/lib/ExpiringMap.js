@@ -22,7 +22,7 @@ ExpiringMap.prototype.init = function (initObject) {
  * @param objectToStore
  * @param timeout
  */
-ExpiringMap.prototype.put = function(name, objectToStore, timeout) {
+ExpiringMap.prototype.put = function(name, objectToStore, timeout, callback) {
 
     if (this.isKeyActive(name) === false) {
 
@@ -42,6 +42,7 @@ ExpiringMap.prototype.put = function(name, objectToStore, timeout) {
             createdTimestamp: created,
             modifiedTimestamp : created,
             timeout : objectTimeout,
+            callback: callback,
             endTime: endTime
         };
         return true;
@@ -83,6 +84,11 @@ ExpiringMap.prototype.isKeyActive = function(name, modify) {
             }
             return true;
         } else {
+
+            if(typeof(obj.callback) != 'undefined'){
+                obj.callback(name, obj.content);
+            }
+
             delete this._objectContainer[name];
             return false;
         }
@@ -145,7 +151,6 @@ ExpiringMap.prototype.containsKey = function(key) {
 };
 
 /**
- * 
  * @param key
  */
 ExpiringMap.prototype.remove = function(key) {

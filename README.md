@@ -33,9 +33,23 @@ if we wait longer than 60 seconds (default expire time)
     //returns false
 
 You can also specify default object timeout on init:
-    var map = new ExpiringMap(30); //in seconds
+    var map = new ExpiringMap({defaultTimeout:20}); //in seconds
 
 Or you can specify timeout for each key individually:
     map.put("foo",{someNumber:321}, 600); //expire key foo after 600 seconds
+
+
+Also you can define callback for each key
+
+    map.put("foo",{someNumber:321}, 30, function(key, data){
+        console.log("key "+key+" has expired, data was:");
+        console.log(data);    
+    });
+
+Callback will be executed when we call get method for this key again
+    map.get("foo");
+    
+Or when we call getKeyList after expiration time
+    map.getKeyList();
 
 ### [ExpiringMap Documentation](https://github.com/kodi/JS-Object-Expire/wiki/ExpiringMap)

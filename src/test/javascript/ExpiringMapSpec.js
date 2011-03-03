@@ -93,6 +93,44 @@ describe('ExpiringMap', function () {
             expect(result).toEqual(true);
         });
 
+    });
+
+
+    it('can execute callback',function(){
+        //put key, expect true for response
+        runs(function () {
+
+            if(map.containsKey(KEY)){
+                map.remove(KEY);
+            }
+
+            var objectToStore = {};
+            objectToStore[OBJECT_KEY] = VALUE;
+            var result = map.put(KEY, objectToStore, 1, function(key,data){
+                var result = data;
+                expect(key).toEqual(KEY);
+
+                expect(result[OBJECT_KEY]).toEqual(VALUE);
+            });
+            expect(result).toEqual(true);
+        });
+
+
+        //test get
+        runs(function () {
+            var result = map.get(KEY);
+            expect(result[OBJECT_KEY]).toEqual(VALUE);
+        });
+
+        //wait for 1 seconds
+        waits(1001);
+
+
+        //test get key list, this should expire key and start callback function
+        runs(function () {
+            var result = map.getKeyList();
+            expect(result.length).toEqual(0);
+        });
 
 
     });
