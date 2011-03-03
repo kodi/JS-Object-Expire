@@ -1,0 +1,6 @@
+Javascript Object Expire
+========================
+
+ExpiringMap
+-----------
+
