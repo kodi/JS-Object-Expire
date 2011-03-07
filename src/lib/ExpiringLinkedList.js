@@ -185,6 +185,10 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
     };
 
+    this.setExpireTime = function(time){
+        this._defaultTimeout = time;
+    }
+
     return this;
 };
 
