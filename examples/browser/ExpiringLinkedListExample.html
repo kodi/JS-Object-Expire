@@ -23,14 +23,9 @@
      *
      */
 
-
     var data = pv.range(0, 100, 1).map(function(x) {
         return {x: x, y: Math.sin(x) + Math.random() + 1.5};
     });
-
-
-
-
 
     /* Sizing and scales. */
     var w = 600,
@@ -87,8 +82,6 @@
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-
-
     var list = new ExpiringLinkedList(60); // create new list, with timeout of 60 sec
 
     setInterval(function() {
@@ -99,12 +92,13 @@
         data = [];
         var i = 0;
 
+        //get all active elements from the list
         list.each(function(element){
             data.push({x:i, y:element});
             i++;
         });
 
-        vis.render();
+        vis.render(); //redraw 
 
     }, 1000);
 
