@@ -107,9 +107,8 @@ describe('ExpiringMap', function () {
             var objectToStore = {};
             objectToStore[OBJECT_KEY] = VALUE;
             var result = map.put(KEY, objectToStore, 1, function(key,data){
-                var result = data;
+                    var result = data;
                 expect(key).toEqual(KEY);
-                alert("KEY EXPIRED: "+key);
                 expect(result[OBJECT_KEY]).toEqual(VALUE);
             });
             expect(result).toEqual(true);

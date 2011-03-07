@@ -1,0 +1,118 @@
+<html>
+<head>
+    <title>Objects Expire Example</title>
+    <script type="text/javascript" src="http://vis.stanford.edu/protovis/protovis-d3.2.js" ></script>
+    <script type="text/javascript" src="../../src/lib/ExpiringLinkedList.js"></script>
+
+    <script type="text/javascript">
+
+
+
+
+    </script>
+</head>
+<body>
+
+
+<div id="center"><div id="fig">
+    <script type="text/javascript+protovis">
+
+    /*
+     *
+     * PROTOVIS START
+     *
+     */
+
+
+    var data = pv.range(0, 100, 1).map(function(x) {
+        return {x: x, y: Math.sin(x) + Math.random() + 1.5};
+    });
+
+
+
+
+
+    /* Sizing and scales. */
+    var w = 600,
+        h = 200,
+        x = pv.Scale.linear(data, function(d) d.x).range(0, w),
+        y = pv.Scale.linear(0, 100).range(0, h);
+
+    /* The root panel. */
+    var vis = new pv.Panel()
+        .width(w)
+        .height(h)
+        .bottom(20)
+        .left(20)
+        .right(10)
+        .top(5);
+
+    /* X-axis ticks. */
+    vis.add(pv.Rule)
+        .data(x.ticks())
+        .visible(function(d) d > 0)
+        .left(x)
+        .strokeStyle("#eee")
+      .add(pv.Rule)
+        .bottom(-5)
+        .height(5)
+        .strokeStyle("#000")
+      .anchor("bottom").add(pv.Label)
+        .text(x.tickFormat);
+
+    /* Y-axis ticks. */
+    vis.add(pv.Rule)
+        .data(y.ticks(5))
+        .bottom(y)
+        .strokeStyle(function(d) d ? "#eee" : "#000")
+      .anchor("left").add(pv.Label)
+        .text(y.tickFormat);
+
+    /* The line. */
+    vis.add(pv.Line)
+        .data(function () { return data; })
+        .interpolate("step-after")
+        .left(function(d) x(d.x))
+        .bottom(function(d) y(d.y))
+        .lineWidth(1);
+
+    /*
+     *
+     * PROTOVIS END
+     *
+     */
+
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+
+    var list = new ExpiringLinkedList(60); // create new list, with timeout of 10 sec
+
+    setInterval(function() {
+
+        var number = getRandomInt(0,100);
+
+        list.push(number);
+        data = [];
+        var i = 0;
+
+        list.each(function(element){
+            data.push({x:i, y:element});
+            i++;
+        });
+
+        vis.render();
+
+    }, 1000);
+
+
+
+    </script>
+  </div></div>
+
+</body>
+
+</html>
