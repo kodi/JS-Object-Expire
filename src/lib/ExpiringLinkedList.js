@@ -26,6 +26,8 @@ var ExpiringLinkedList = function (timeout, metaData) {
     //nice to have - first item pointer
     this._firstItem = this._currentItem;
 
+    this.documentContainer = {};
+
     /**
      * push new value into the buffer
      * @param value
@@ -34,6 +36,8 @@ var ExpiringLinkedList = function (timeout, metaData) {
         //assign value to current item
         this._currentItem.value = value;
         this._currentItem.timestamp = new Date().getTime();
+
+        this.documentContainer[this._currentItem.UID] = this._currentItem;
 
         //prepare empty item, that points to the previous
         var emptyItem = new ExpiringLinkedListItem(undefined, null, this._currentItem, this.UID);
@@ -123,7 +127,8 @@ var ExpiringLinkedList = function (timeout, metaData) {
         } else {
             // if this item is not active, delete all older
             while (this._tmpItem !== null) {
-
+                var uidToDelete = this._tmpItem.UID;
+                /**
                 if (this._tmpItem.back == null) {
                     this._tmpItem = null;
                     if (this._len > 0) {
@@ -136,6 +141,18 @@ var ExpiringLinkedList = function (timeout, metaData) {
                     this._tmpItem.next = null;
                     this._len -= 1;
                 }
+
+                 */
+
+                for(var uid in this.documentContainer ){
+
+                    if(this.documentContainer[uid].UID <= uidToDelete){
+                        this.documentContainer[uid] = null;
+                        delete this.documentContainer[uid];
+                    }
+                }
+
+                this._tmpItem = null;
 
             }
 
@@ -191,4 +208,3 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
     return this;
 };
-
