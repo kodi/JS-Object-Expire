@@ -23,10 +23,9 @@ var ExpiringLinkedList = function (timeout, metaData) {
     //create one empty item
     this._currentItem = new ExpiringLinkedListItem(undefined, null, null, this.UID);
     this.UID += 1;
-    //nice to have - first item pointer
-    this._firstItem = this._currentItem;
-
-    this.documentContainer = {};
+    
+    //create container of all items where key is item's UID
+    this.itemsContainer = {};
 
     /**
      * push new value into the buffer
@@ -37,7 +36,7 @@ var ExpiringLinkedList = function (timeout, metaData) {
         this._currentItem.value = value;
         this._currentItem.timestamp = new Date().getTime();
 
-        this.documentContainer[this._currentItem.UID] = this._currentItem;
+        this.itemsContainer[this._currentItem.UID] = this._currentItem;
 
         //prepare empty item, that points to the previous
         var emptyItem = new ExpiringLinkedListItem(undefined, null, this._currentItem, this.UID);
@@ -47,7 +46,6 @@ var ExpiringLinkedList = function (timeout, metaData) {
         this._currentItem = emptyItem;
 
         this._len += 1;
-
 
 
     };
@@ -65,33 +63,27 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
     this.pop = function () {
 
-        var allExpired = false;
-
         if (this._len == 0) {
             return false;
         }
 
         this._currentItem = this._currentItem.back;
+        var currentUid = this._currentItem.UID;
+        this.deleteItem(currentUid);
         this._currentItem.next = null;
 
-        this._len -= 1;
 
-
-        //invalidate expired items
-        while (this.isItemActive(this._currentItem) === false && this._len > 0) {
-
-            this._currentItem = this._currentItem.back;
-            this._currentItem.next = null;
-            this._len -= 1;
-
-
-            if (this._len == 0) {
-                allExpired = true;
+        if (! this.isItemActive(this._currentItem)) {
+            console.log("FOUND INACTIVE");
+            for (var uid in this.itemsContainer) {
+                //delete all older
+                if (this.itemsContainer[uid].UID <= currentUid) {
+                    this.deleteItem(uid);
+                }
             }
         }
 
-
-        if (this._len >= 0 && !allExpired) {
+        if (this._len > 0 ) {
             return this._currentItem.value;
         } else {
             return false;
@@ -111,10 +103,10 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
 
         if (this._len == 0) {
-            if(this._tmpItem !== null && this._tmpItem.next !== null ){
+            if (this._tmpItem !== null && this._tmpItem.next !== null) {
                 this._tmpItem.next.back = null;
                 return false;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -125,45 +117,26 @@ var ExpiringLinkedList = function (timeout, metaData) {
         if (this.isItemActive(this._tmpItem)) {
             hasNext = true;
         } else {
+
             // if this item is not active, delete all older
             while (this._tmpItem !== null) {
                 var uidToDelete = this._tmpItem.UID;
-                /**
-                if (this._tmpItem.back == null) {
-                    this._tmpItem = null;
-                    if (this._len > 0) {
-                        this._len -= 1;
-                    }
-                    break;
-                } else {
-                    this._tmpItem = this._tmpItem.back;
-                    this._tmpItem.next.back = null;
-                    this._tmpItem.next = null;
-                    this._len -= 1;
-                }
 
-                 */
-
-                for(var uid in this.documentContainer ){
-
-                    if(this.documentContainer[uid].UID <= uidToDelete){
-                        this.documentContainer[uid] = null;
-                        delete this.documentContainer[uid];
+                for (var uid in this.itemsContainer) {
+                    //delete all older
+                    if (this.itemsContainer[uid].UID <= uidToDelete) {
+                        this.deleteItem(uid);
                     }
                 }
-
                 this._tmpItem = null;
-
             }
-
-
         }
 
         return hasNext;
 
     };
     /**
-     * iterate and get all elements of buffer
+     * iterate and get all ACTIVE elements of a buffer
      * @param callback
      */
     this.each = function(callback) {
@@ -175,6 +148,18 @@ var ExpiringLinkedList = function (timeout, metaData) {
             callback(this._read())
         }
 
+
+    };
+
+
+    this.deleteItem = function(uid) {
+
+        this.itemsContainer[uid].next.back = null;
+        this.itemsContainer[uid].next = null;
+        this.itemsContainer[uid] = null;
+        delete this.itemsContainer[uid];
+
+        this._len -= 1;
 
     };
 
@@ -202,8 +187,12 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
     };
 
-    this.setExpireTime = function(time){
+    this.setExpireTime = function(time) {
         this._defaultTimeout = time;
+    }
+
+    this.size = function() {
+        return this._len;
     }
 
     return this;

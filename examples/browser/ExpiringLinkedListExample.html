@@ -7,6 +7,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
 
     <link type="text/css" href="css/jquery-ui-1.8.10.custom.css" rel="stylesheet"/>
+    <link type="text/css" href="css/examples.css" rel="stylesheet"/>
 
     <script type="text/javascript">
 
@@ -14,7 +15,9 @@
         var TIMEOUT = 6;
 
         $(document).ready(function(){
-            
+
+            $('#expire').html(6);
+
             $('#slider').slider({
 			    value: 60,
 			    orientation: "horizontal",
@@ -22,6 +25,7 @@
 			    animate: true,
                 change:function(event, ui){
                     list.setExpireTime(ui.value/10);
+                    $('#expire').html(ui.value/10);
                 }
 		    });
         });
@@ -36,9 +40,7 @@
             width:500px;
         }
 
-
     </style>
-
 </head>
 <body>
 
@@ -55,12 +57,12 @@
      *
      */
 
-    var data = pv.range(0, 10, 0.1).map(function(x) {
+    var data = pv.range(0, 12, 0.1).map(function(x) {
         return {x: x, y: Math.sin(x) + Math.random() + 1.5};
     });
 
     /* Sizing and scales. */
-    var w = 500,
+    var w = 600,
         h = 200,
         x = pv.Scale.linear(data, function(d) d.x).range(0, w),
         y = pv.Scale.linear(0, 100).range(0, h);
@@ -113,30 +115,52 @@
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    var list = new ExpiringLinkedList(TIMEOUT); // create new list, with timeout of 60 sec
 
-    setInterval(function()
-    {
+
+    //
+    //SETUP EXPIRING LIST
+    //
+    var list = new ExpiringLinkedList(TIMEOUT); // create new list, with timeout of 6 sec
+
+    var list3 = new ExpiringLinkedList(1.5);
+
+    setInterval(function(){
+        
         // get random number
         var number = getRandomInt(0,100);
 
         // push it to the list, and forget about it
-        // it will expire after 60 seconds
-
+        // it will expire after 6 seconds
         list.push(number);
+        list3.push(number);
 
-        //clear previous data
+        //clear previous Protovis data
         data = [];
         var i = 0;
 
         //get all active elements from the list
         list.each(function(element){
 
-            data.push({x:i, y:element});
-            i+= 0.1;
+            data.push({x: i, y:element});
+            i+=0.1;
 
         });
+        
+        if(new Date().getTime() % 25 == 0){
+            console.log("moduoooo");
+            console.log(list3.pop());
+            console.log(list3.pop());
+            console.log(list3.pop());
+            console.log(list3.pop());
+            console.log(list3.pop());
+            console.log(list3.pop());
+            console.log(list3.pop());
+            console.log(list3.pop());
+            console.log(list3.pop());
 
+            console.log("len:: "+list3.size());
+        }
+        
         vis.render(); //redraw 
 
     }, 100);
@@ -147,7 +171,7 @@
   </div></div>
 
 <div id="slider" ></div>
+<div style="margin-top:12px;">Expire time: <span id="expire"></span>sec.</div>
 
 </body>
-
 </html>
