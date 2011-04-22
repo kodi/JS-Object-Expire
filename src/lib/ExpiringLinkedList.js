@@ -49,17 +49,6 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
 
     };
-    /**
-     *  we use this function on initial load, to save existing timestamps
-     * @param entry
-     */
-    this.loadPush = function (entry) {
-        var value = entry.value || undefined;
-        var timestamp = entry.timestamp || undefined;
-
-        this._currentItem.value = {"value":value,"timestamp":timestamp};
-        this._currentItem = this._currentItem.next;
-    };
 
     this.pop = function () {
 
@@ -74,7 +63,6 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
 
         if (! this.isItemActive(this._currentItem)) {
-            console.log("FOUND INACTIVE");
             for (var uid in this.itemsContainer) {
                 //delete all older
                 if (this.itemsContainer[uid].UID <= currentUid) {
@@ -179,21 +167,16 @@ var ExpiringLinkedList = function (timeout, metaData) {
         var endTime = item.timestamp + (this._defaultTimeout * 1000);
 
 
-        if (time >= endTime) {
-            return false;
-        } else {
-            return true;
-        }
-
+        return (time <= endTime);
     };
 
     this.setExpireTime = function(time) {
         this._defaultTimeout = time;
-    }
+    };
 
     this.size = function() {
         return this._len;
-    }
+    };
 
     return this;
 };
