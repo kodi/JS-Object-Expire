@@ -16,7 +16,7 @@ setInterval(function() {
     var key = "key_" + Math.round(COUNT * 10);
     var objectToStore = generateObject(COUNT);
 
-    //store new object
+    //store new object into map
     map.put(key, objectToStore, EXPIRE_TIME);
 
 
