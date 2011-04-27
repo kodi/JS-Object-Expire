@@ -1,11 +1,13 @@
-var map = new ExpiringMap();
 
+//Create Map Object
+var map = new ExpiringMap();
 
 var EXPIRE_TIME = 5;
 var COUNT = 0;
 var PLACEMENT = 'random';
 
 
+//MAIN LOOP
 setInterval(function() {
 
     COUNT += 0.1;
@@ -23,17 +25,38 @@ setInterval(function() {
 
 }, 100);
 
+//
+//Generate object that will go into map
+//
+var generateObject = function(counter) {
+    if (PLACEMENT == 'circle') {
+        return {x:(Math.sin(counter)) / 2.5 + 0.5,  y:(Math.cos(counter)) / 2.5 + 0.5, z: null }; // we leave z as null, it will be modified later
+    } else if (PLACEMENT == 'random') {
+        return {x:Math.random(),  y:Math.random(), z: null };
+    }
+};
 
+
+
+//
+// Collect the data from the map, and refresh chart
+//
 var redrawDots = function() {
 
+    //reset data
     data = [];
+
+    //get valid keys and current timestamp
     var keys = map.getKeyList();
     var timestamp = new Date().getTime();
 
+    //iterate and get all data
     for (key in keys) {
         var keyName = keys[key];
         var tmpData = map.getWithMetadata(keyName);
-        tmpData.content.z = (tmpData.endTime - timestamp) / (EXPIRE_TIME * 1000) * 100;
+
+        tmpData.content.z = (tmpData.endTime - timestamp) / (EXPIRE_TIME * 1000) * 100; //modify z property of every object
+
         data.push(tmpData.content);
     }
 
@@ -42,21 +65,11 @@ var redrawDots = function() {
     vis.render();
 };
 
-var generateObject = function(counter) {
-
-    if (PLACEMENT == 'circle') {
-
-        return {x:(Math.sin(counter)) / 2.5 + 0.5,  y:(Math.cos(counter)) / 2.5 + 0.5, z: null };
-
-    } else if (PLACEMENT == 'random') {
-
-        return {x:Math.random(),  y:Math.random(), z: null };
-
-    }
-
-};
 
 
+//
+//DOM Handlers
+//
 $(document).ready(function() {
 
     $('#expire').html(EXPIRE_TIME);
