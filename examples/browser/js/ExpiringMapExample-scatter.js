@@ -6,8 +6,9 @@ var EXPIRE_TIME = 5;
 var COUNT = 0;
 var PLACEMENT = 'random';
 
-
-//MAIN LOOP
+//#
+//# MAIN LOOP
+//#
 setInterval(function() {
 
     COUNT += 0.1;
@@ -26,13 +27,21 @@ setInterval(function() {
 }, 100);
 
 //
-//Generate object that will go into map
+//Generate object that will go into the map
 //
 var generateObject = function(counter) {
     if (PLACEMENT == 'circle') {
-        return {x:(Math.sin(counter)) / 2.5 + 0.5,  y:(Math.cos(counter)) / 2.5 + 0.5, z: null }; // we leave z as null, it will be modified later
+        return {
+            x: (Math.sin(counter)) / 2.5 + 0.5,
+            y: (Math.cos(counter)) / 2.5 + 0.5,
+            z: null // we leave z as null, it will be modified later
+        };
     } else if (PLACEMENT == 'random') {
-        return {x:Math.random(),  y:Math.random(), z: null };
+        return {
+            x: Math.random(),
+            y: Math.random(),
+            z: null
+        };
     }
 };
 
@@ -53,6 +62,8 @@ var redrawDots = function() {
     //iterate and get all data
     for (key in keys) {
         var keyName = keys[key];
+        
+        //we use getWithMetadata instead of get because wee need endTime property of a stored object
         var tmpData = map.getWithMetadata(keyName);
 
         tmpData.content.z = (tmpData.endTime - timestamp) / (EXPIRE_TIME * 1000) * 100; //modify z property of every object
