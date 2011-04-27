@@ -17,7 +17,7 @@ ExpiringMap.prototype.init = function (initObject) {
 };
 
 /**
- * 
+ *
  * @param name
  * @param objectToStore
  * @param timeout
@@ -45,6 +45,7 @@ ExpiringMap.prototype.put = function(name, objectToStore, timeout, callback) {
             callback: callback,
             endTime: endTime
         };
+
         return true;
     } else {
         return false;
@@ -52,7 +53,7 @@ ExpiringMap.prototype.put = function(name, objectToStore, timeout, callback) {
 };
 
 /**
- * 
+ *
  * @param name
  */
 
@@ -60,18 +61,27 @@ ExpiringMap.prototype.get = function(name) {
 
     if (this.isKeyActive(name, true)) {
         return this._objectContainer[name].content;
-    }else{
+    } else {
+        return false;
+    }
+};
+
+
+ExpiringMap.prototype.getWithMetadata = function(name) {
+
+    if (this.isKeyActive(name, true)) {
+        return this._objectContainer[name];
+    } else {
         return false;
     }
 };
 
 /**
- * 
+ *
  * @param name
  * @param modify
  */
 ExpiringMap.prototype.isKeyActive = function(name, modify) {
-
     if (typeof(this._objectContainer[name]) != 'undefined') {
 
         var obj = this._objectContainer[name];
@@ -85,7 +95,7 @@ ExpiringMap.prototype.isKeyActive = function(name, modify) {
             return true;
         } else {
 
-            if(typeof(obj.callback) != 'undefined'){
+            if (typeof(obj.callback) != 'undefined') {
                 obj.callback(name, obj.content);
             }
 
@@ -98,7 +108,7 @@ ExpiringMap.prototype.isKeyActive = function(name, modify) {
 };
 
 /**
- * 
+ *
  * @param key
  */
 ExpiringMap.prototype.getAccessed = function(key) {
@@ -108,7 +118,7 @@ ExpiringMap.prototype.getAccessed = function(key) {
 };
 
 /**
- * 
+ *
  */
 ExpiringMap.prototype.getKeyList = function() {
 
@@ -124,7 +134,7 @@ ExpiringMap.prototype.getKeyList = function() {
 
 
 /**
- * 
+ *
  * @param key
  */
 ExpiringMap.prototype.getInfo = function(key) {
@@ -134,10 +144,10 @@ ExpiringMap.prototype.getInfo = function(key) {
 
         return {expired:false,
             info:{
-                    createdTimestamp: obj.createdTimestamp,
-                    modifiedTimestamp: obj.modifiedTimestamp,
-                    timeout: obj.timeout,
-                    endTime: obj.endTime
+                createdTimestamp: obj.createdTimestamp,
+                modifiedTimestamp: obj.modifiedTimestamp,
+                timeout: obj.timeout,
+                endTime: obj.endTime
             }
         }
     } else {
@@ -146,7 +156,7 @@ ExpiringMap.prototype.getInfo = function(key) {
 };
 
 /**
- * 
+ *
  * @param key
  */
 ExpiringMap.prototype.containsKey = function(key) {
@@ -164,3 +174,14 @@ ExpiringMap.prototype.remove = function(key) {
         return false;
     }
 };
+
+ExpiringMap.prototype.dumpData = function() {
+    var out = "";
+    for (var key in this._objectContainer) {
+
+        out += "{\"key\":\""+key+"\",\"created\":"+this._objectContainer[key].createdTimestamp+", \"data\":"+JSON.stringify(this._objectContainer[key].content) + "}\n";
+    }
+
+    return out;
+
+}

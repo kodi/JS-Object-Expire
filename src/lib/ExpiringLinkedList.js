@@ -23,7 +23,7 @@ var ExpiringLinkedList = function (timeout, metaData) {
     //create one empty item
     this._currentItem = new ExpiringLinkedListItem(undefined, null, null, this.UID);
     this.UID += 1;
-    
+
     //create container of all items where key is item's UID
     this.itemsContainer = {};
 
@@ -62,16 +62,21 @@ var ExpiringLinkedList = function (timeout, metaData) {
         this._currentItem.next = null;
 
 
+
         if (! this.isItemActive(this._currentItem)) {
             for (var uid in this.itemsContainer) {
                 //delete all older
                 if (this.itemsContainer[uid].UID <= currentUid) {
-                    this.deleteItem(uid);
+                        this.deleteItem(uid);
                 }
             }
+        }else{
+            //if(new Date().getTime() % 10 == 0){
+                this.purgeOldItems();
+            //}
         }
 
-        if (this._len > 0 ) {
+        if (this._len > 0) {
             return this._currentItem.value;
         } else {
             return false;
@@ -170,6 +175,80 @@ var ExpiringLinkedList = function (timeout, metaData) {
         return (time <= endTime);
     };
 
+    this.getOldestUid = function() {
+        var oldest = null;
+        var start = (new Date).getTime();
+        var steps = 0;
+        
+        for (var uid in this.itemsContainer) {
+            steps += 1;
+            if (this.isItemActive(this.itemsContainer[uid])) {
+                break;
+            }
+
+            oldest = uid;
+        }
+
+        var diff = (new Date).getTime() - start;
+
+        console.log("DIFFF\t"+diff);
+        console.log("STEPS\t"+steps);
+
+        return oldest;
+    };
+
+
+
+    this.getOldestUidNew = function() {
+        var oldest = null;
+        var start = (new Date).getTime();
+        this.steps = 0;
+
+
+        this.startUid =  this._currentItem.UID;
+        oldest = this.getOldestRecursive(this._currentItem);
+
+        var diff = (new Date).getTime() - start;
+
+        console.log("DIFFF\t"+diff);
+        console.log("STEPS\t"+this.steps);
+
+        return oldest;
+    };
+
+
+    this.getOldestRecursive = function(item, uid){
+        if(this.isItemActive(item)){
+
+            this.steps ++;
+
+            if(typeof(uid)=='undefined'){
+                var newItemUid = Math.floor(item.UID - this._len / 2);
+                return this.getOldestRecursive(this.itemsContainer[newItemUid], newItemUid)
+            }else{
+                var newItemUid = item.UID - ((this.startUid - this._len));
+            }
+        }else{
+
+            this.steps ++;
+            return uid;
+        }
+    };
+
+
+
+
+    this.deleteOlderThan = function(uidToDelete) {
+        //console.log("DELETE OLDER THAN " +uidToDelete);
+        for (var uid in this.itemsContainer) {
+            //delete all older
+            if (this.itemsContainer[uid].UID <= uidToDelete) {
+                this.deleteItem(uid);
+            }
+        }
+    };
+
+
     this.setExpireTime = function(time) {
         this._defaultTimeout = time;
     };
@@ -178,5 +257,17 @@ var ExpiringLinkedList = function (timeout, metaData) {
         return this._len;
     };
 
+    this.purgeOldItems = function(){
+
+        var oldest = this.getOldestUidNew();
+        
+        //console.log("OLDEST UID: "+oldest);
+        if(oldest !== null){
+            this.deleteOlderThan(oldest);    
+        }
+    };
+
     return this;
 };
+
+exports.ExpiringLinkedList = ExpiringLinkedList;

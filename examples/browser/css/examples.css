@@ -1,3 +1,12 @@
 body{
     font:normal 12px "Helvetica Neue",Arial, sans-serif;
 }
+
+
+#container{
+
+    padding:24px;
+}
+
+
+h1,h2,h3,h4,h5,h6{color:#333;font-family: 'Yanone Kaffeesatz', arial, serif;}
