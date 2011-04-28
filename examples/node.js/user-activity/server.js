@@ -23,6 +23,7 @@ var dispatch = function(request, response){
 
     //create unique user id from users remote address and remote port
     var uniqueId = request.socket.remoteAddress +":"+ request.socket.remotePort;
+    var userIp = request.remoteAddress;
 
     var urlObject = urlParser.parse(request.url, true);
     var url = urlObject.pathname;
@@ -43,7 +44,7 @@ var dispatch = function(request, response){
         var value = urlObject.query.value;
 
         if(typeof(value) != 'undefined'){
-            activeUsers.putOrUpdate(uniqueId, {user:uniqueId, valueClicked:value}, DEFAULT_TIMEOUT);
+            activeUsers.putOrUpdate(uniqueId, {user:userIp, valueClicked:value}, DEFAULT_TIMEOUT);
         }
 
         response.writeHead(200, {'Content-Type': 'text/html'});
