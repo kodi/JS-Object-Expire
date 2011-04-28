@@ -75,6 +75,24 @@ ExpiringMap.prototype.put = function(name, objectToStore, timeout, callback) {
     }
 };
 
+ExpiringMap.prototype.putOrUpdate = function(name, objectToStore, timeout, callback){
+
+
+
+    
+    if(this.isKeyActive(name)){
+
+        var currentTimestamp = new Date().getTime();
+
+        this._objectContainer[name].content  = objectToStore;
+        this._objectContainer[name].modifiedTimestamp = currentTimestamp;
+        this._objectContainer[name].endTime = currentTimestamp + (this._objectContainer[name].timeout * 1000);
+
+    }else{
+        return this.put(name, objectToStore, timeout, callback);
+    }
+};
+
 /**
  *
  * @param name
@@ -208,3 +226,7 @@ ExpiringMap.prototype.dumpData = function() {
     return out;
 
 }
+
+
+var exports = exports || {};
+exports.ExpiringMap = ExpiringMap;

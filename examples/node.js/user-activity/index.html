@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>User Activity Example</title>
+    </head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+    <script>
+
+        var SERVER_URL = 'http://127.0.0.1:1337';
+
+        $(document).ready(function(){
+            $('.button').click(function(){
+                handleButtonClick(this.value);
+            });
+        });
+        
+        
+        var handleButtonClick = function(value){
+            
+            var URL = SERVER_URL+'/update?value='+value
+            console.log("GETTING URL" +URL);
+            $.ajax({
+                url: URL,
+                success: function(data) {
+                    $('#activeUsers').html(data);
+                }
+            });
+        };
+
+        setInterval(function(){
+            var URL = SERVER_URL+'/update';
+            $.ajax({
+                url: URL,
+                success: function(data) {
+                    $('#activeUsers').html(data);
+                }
+            });
+
+        },1000);
+        
+    </script>
+<body>
+    <h1>test</h1>
+<table>
+    <tr>
+        <td><input type="button" value="A" class="button" /></td>
+        <td><input type="button" value="B" class="button" /></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="C" class="button" /></td>
+        <td><input type="button" value="D" class="button" /></td>
+    </tr>
+</table>
+
+<h3>User Events in last 15 seconds:</h3>
+<div id="activeUsers"></div>
+
+</body>
+</html>
