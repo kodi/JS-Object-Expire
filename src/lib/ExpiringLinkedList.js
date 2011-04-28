@@ -212,8 +212,8 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
         var diff = (new Date).getTime() - start;
 
-        console.log("DIFFF\t"+diff);
-        console.log("STEPS\t"+steps);
+        //console.log("DIFFF\t"+diff);
+        //console.log("STEPS\t"+steps);
 
         return oldest;
     };
@@ -231,8 +231,8 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
         var diff = (new Date).getTime() - start;
 
-        console.log("DIFFF\t"+diff);
-        console.log("STEPS\t"+this.steps);
+        //console.log("DIFFF\t"+diff);
+        //console.log("STEPS\t"+this.steps);
 
         return oldest;
     };
@@ -280,7 +280,7 @@ var ExpiringLinkedList = function (timeout, metaData) {
 
     this.purgeOldItems = function(){
 
-        var oldest = this.getOldestUidNew();
+        var oldest = this.getOldestUid();
         
         //console.log("OLDEST UID: "+oldest);
         if(oldest !== null){
@@ -291,4 +291,5 @@ var ExpiringLinkedList = function (timeout, metaData) {
     return this;
 };
 
+var exports = exports || {};
 exports.ExpiringLinkedList = ExpiringLinkedList;
