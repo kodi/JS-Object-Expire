@@ -4,7 +4,7 @@ var http        = require('http');
 var fs          = require('fs');
 var urlParser   = require('url');
 
-var port = 1337;
+var port = 8080;
 var DEFAULT_TIMEOUT = 15;
 
 //initialize map
