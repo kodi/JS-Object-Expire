@@ -47,6 +47,44 @@
 
 <div id="center"><div id="fig">
     <script type="text/javascript+protovis">
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    //
+    //SETUP EXPIRING LIST
+    //
+    var list = new ExpiringLinkedList(TIMEOUT); // create new list, with timeout of 6 sec
+
+    setInterval(function(){
+
+        // get random number
+        var number = getRandomInt(0,100);
+
+        // push it to the list, and forget about it
+        // it will expire after 6 seconds
+        list.push(number);
+
+        //clear previous Protovis data
+        data = [];
+        var i = 0;
+
+        //get all active elements from the list
+        list.each(function(element){
+
+            data.push({x: i, y:element});
+            i+=0.1;
+
+        });
+
+        vis.render(); //redraw
+
+    }, 100);
+
+
+
     /*
      *
      * PROTOVIS START
@@ -102,58 +140,8 @@
         .lineWidth(1);
 
     /*
-     *
      * PROTOVIS END
-     *
      */
-
-
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-
-    //
-    //SETUP EXPIRING LIST
-    //
-    var list = new ExpiringLinkedList(TIMEOUT); // create new list, with timeout of 6 sec
-
-    var list3 = new ExpiringLinkedList(15);
-
-    setInterval(function(){
-        
-        // get random number
-        var number = getRandomInt(0,100);
-
-        // push it to the list, and forget about it
-        // it will expire after 6 seconds
-        list.push(number);
-        list3.push(number);
-
-        //clear previous Protovis data
-        data = [];
-        var i = 0;
-
-        //get all active elements from the list
-        list.each(function(element){
-
-            data.push({x: i, y:element});
-            i+=0.1;
-
-        });
-        //
-        if(new Date().getTime() % 25 == 0){
-            console.log("moduoooo");
-            console.log(list3.pop());
-          
-            console.log("len:: "+list3.size());
-        }
-
-        vis.render(); //redraw 
-
-    }, 100);
-
-
 
     </script>
   </div></div>
