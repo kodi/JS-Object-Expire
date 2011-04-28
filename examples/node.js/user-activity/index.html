@@ -28,6 +28,9 @@
         };
 
         setInterval(function(){
+
+            $('#activeUsers').html('Loading...');
+
             var URL = SERVER_URL+'/update';
             $.ajax({
                 url: URL,
@@ -40,7 +43,7 @@
         
     </script>
 <body>
-    <h1>test</h1>
+    <h1>User Actions</h1>
 <table>
     <tr>
         <td><input type="button" value="A" class="button" /></td>
