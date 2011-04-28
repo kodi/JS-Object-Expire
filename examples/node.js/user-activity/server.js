@@ -29,7 +29,6 @@ var dispatch = function(request, response){
 
     console.log("Request From: "+uniqueId+"\t\t URL:"+url);
 
-
     //serve static page 
     if(url == '/'){
         response.writeHead(200, {'Content-Type': 'text/html'});
@@ -48,12 +47,9 @@ var dispatch = function(request, response){
         }
 
         response.writeHead(200, {'Content-Type': 'text/html'});
-
         response.end(generateOutputHtml());
 
     }
-
-
 
 };
 
@@ -64,14 +60,11 @@ var generateOutputHtml = function(){
     var HTML = '<ul>';
 
     for(var i = 0; i < validKeys.length; i++){
-
         var user = activeUsers.get(validKeys[i]);
-
         HTML += '<li>User: '+user.user+' clicked '+user.valueClicked+' button</li>';
     }
 
     HTML += '</ul>';
-
     return HTML;
 };
 
