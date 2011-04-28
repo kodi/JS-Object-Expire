@@ -29,17 +29,18 @@
 
         setInterval(function(){
 
-            $('#activeUsers').html('Loading...');
+            $('.loading').html('Loading...');
 
             var URL = SERVER_URL+'/update';
             $.ajax({
                 url: URL,
                 success: function(data) {
+                    $('.loading').html('');
                     $('#activeUsers').html(data);
                 }
             });
 
-        },1000);
+        },2000);
         
     </script>
 <body>
@@ -56,7 +57,7 @@
 </table>
 
 <h3>User Events</h3>
-<p>Events will expire after 15 seconds</p>
+<p>Events will expire after 15 seconds. <span class="loading"></span></p>
 <div id="activeUsers"></div>
 
 </body>
