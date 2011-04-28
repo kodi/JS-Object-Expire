@@ -44,7 +44,7 @@ var dispatch = function(request, response){
         var value = urlObject.query.value;
 
         if(typeof(value) != 'undefined'){
-            activeUsers.putOrUpdate(uniqueId, {user:userIp, valueClicked:value}, DEFAULT_TIMEOUT);
+            activeUsers.putOrUpdate(userIp, {user:userIp, valueClicked:value}, DEFAULT_TIMEOUT);
         }
 
         response.writeHead(200, {'Content-Type': 'text/html'});
